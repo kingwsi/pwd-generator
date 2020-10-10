@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <title>密码生成🎉</title>
+  <title>🎉密码生成</title>
   <style>
-    .div-view {
-      height: 20px;
+    body {
+      background-color: aliceblue;
+      padding-top: 50px;
     }
 
     .view-box {
@@ -20,7 +20,7 @@
     .message {
       width: 100px;
       height: 50px;
-      border: 1px solid #333;
+      border: 1px solid #909090;
     }
 
     .button {
@@ -29,46 +29,124 @@
       background-color: #989898;
       border: 1px solid #333;
       margin: 10px;
+      font-size: 1.2em;
+      color: #FFF;
+      border-radius: 15px;
+      padding: 3px 10px;
+    }
+
+    .header-title {
+      font-size: x-small;
+      width: 100%;
+      text-align: center;
+    }
+
+    #result-area {
+      margin-top: 15px;
+      width: 100%;
+      text-align: center;
+      font-size: x-large;
+      border: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    }
+
+    .history {
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    .history ul li {
+      height: 40px;
+      line-height: 40px;
+      list-style: none;
+    }
+
+    .history ul li span {
+      float: right;
+      padding-right: 10%;
     }
   </style>
 </head>
 
 <body>
   <div class="content">
-    <div>随机生成密码，奥里给</div>
+    <div class="header-title">随机生成强密码</div>
     <div class="view-box div-view">
       <input id="result-area">
     </div>
-    <div onclick="generator()" class="button">生成</div>
-    <div onclick="copyPwd()" class="button">复制</div>
-    <div class="message" id="msg" hidden>
-      <span>复制成功</span>
+    <div style="width: 100%;text-align: center; margin-top: 20px;">
+      <span onclick="generator()" class="button">生成</span>
+      <span onclick="copyPwd()" class="button">复制</span>
     </div>
-  </div>
+    <div class="history">
+      <div class="history-list">
+      </div>
+      <div style="width: 100%;text-align: center; margin-top:40px; color: #333" onclick="cleanHistory()"
+        id="cleanButton">清除记录</span>
+      </div>
+      <div class="message" id="msg" hidden>
+        <span>复制成功</span>
+      </div>
+    </div>
 
-  <script>
-    let letter = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let symbol = '@#$*()/_';
-    generator();
-    function generator() {
-      let pwd = "";
-      for (i = 0; i < 16; i++) {
-        let index = Math.floor(Math.random() * letter.length + 1) - 1;
-        pwd += letter.charAt(index)
+    <script>
+      let letter = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let symbol = '@#$*()/_';
+      generator();
+      function generator() {
+        let pwd = "";
+        for (i = 0; i < 16; i++) {
+          let index = Math.floor(Math.random() * letter.length + 1) - 1;
+          pwd += letter.charAt(index)
+        }
+        $('#result-area').val(pwd)
+        flushHistoryList(pwd)
       }
-      $('#result-area').val(pwd)
-    }
 
-    function copyPwd() {
-      let pwd = document.querySelector('#result-area');
-      pwd.select(); // 选择对象
-      document.execCommand("Copy");
-      $("#msg").show()
-      setTimeout(() => {
-        $("#msg").hide()
-      }, 1500);
-    }
-  </script>
+      function copyPwd(val) {
+        if (val) {
+          document.querySelector('#result-area').value = val
+        }
+        let pwd = document.querySelector('#result-area');
+        pwd.select(); // 选择对象
+        document.execCommand("Copy");
+        $("#msg").show()
+        setTimeout(() => {
+          $("#msg").hide()
+        }, 1500);
+      }
+
+      /*刷新历史记录*/
+      function flushHistoryList(pwd) {
+        let historyArr = JSON.parse(localStorage.getItem('history'));
+        if (!historyArr) {
+          $("#cleanButton").hide()
+          historyArr = []
+        } else {
+          $("#cleanButton").show()
+        }
+        // 展示history 列表
+        let ul = $('<ul></ul>')
+        historyArr.forEach(item => {
+          ul.append('<li>' + item + '<span onclick="copyPwd(\'' + item + '\')">复制</span></li>')
+        });
+        $(".history-list").html(ul);
+        historyArr.push(pwd)
+        if (historyArr.length > 10) {
+          historyArr.shift(pwd)
+        }
+        // 存储
+        localStorage.setItem('history', JSON.stringify(historyArr));
+      }
+
+      /*清除历史记录*/
+      function cleanHistory() {
+        localStorage.removeItem('history')
+        document.querySelector('#result-area').value = '';
+        $("#cleanButton").hide()
+        $(".history-list").html('');
+      }
+    </script>
 </body>
 
 </html>
