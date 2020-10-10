@@ -10,7 +10,8 @@
     body {
       background-color: aliceblue;
     }
-    span{
+
+    span {
       cursor: pointer;
     }
 
@@ -21,9 +22,16 @@
       margin-top: 50px;
     }
 
-    .view-box {
-      width: 80%;
+    #result-area {
       margin: 0 auto;
+      margin-top: 15px;
+      width: 100%;
+      text-align: center;
+      height: 30px;
+      font-size: x-large;
+      border: hidden;
+      letter-spacing: 2px;
+      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
     }
 
     .message {
@@ -180,22 +188,13 @@
     .button {
       height: 20px;
       width: 60px;
-      background-color: #989898;
+      background-color: #eeeeee;
       border: 1px solid #333;
-      margin: 10px;
+      margin: 0px 18px;
       font-size: 1.2em;
-      color: #FFF;
       border-radius: 15px;
-      padding: 3px 10px;
-    }
-
-    #result-area {
-      margin-top: 15px;
-      width: 100%;
-      text-align: center;
-      font-size: x-large;
-      border: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+      padding: 3px 15px;
+      box-shadow: 2px 1px 4px 0px #bcbcbc;
     }
 
     .history {
@@ -221,17 +220,17 @@
     复制成功
   </div>
   <div class="header-title">随机生成强密码</div>
-  <div class="view-box div-view">
-    <input id="result-area">
+  <div class="view-box div-view" id="result-area">
   </div>
-  <div style="width: 100%;text-align: center; margin-top: 20px;">
+  <div style="width: 100%;text-align: center; margin-top: 30px;">
     <span onclick="generator()" class="button">生成</span>
-    <span onclick="copyPwd()" class="button">复制</span>
+    <span onclick="copyTextToClipboard()" class="button">复制</span>
   </div>
   <div class="history">
     <div class="history-list">
     </div>
-    <div style="width: 100%;text-align: center; margin-top:40px; color: #333" onclick="cleanHistory()" id="cleanButton">
+    <div style="width: 100%;text-align: center; margin-top:50px; color: #7c7c7c" onclick="cleanHistory()"
+      id="cleanButton">
       <span>清除记录</span>
     </div>
   </div>
@@ -247,21 +246,8 @@
         let index = Math.floor(Math.random() * letter.length + 1) - 1;
         pwd += letter.charAt(index)
       }
-      $('#result-area').val(pwd)
+      $('#result-area').text(pwd)
       flushHistoryList(pwd)
-    }
-
-    function copyPwd(val) {
-      if (val) {
-        document.querySelector('#result-area').value = val
-      }
-      let pwd = document.querySelector('#result-area');
-      pwd.select(); // 选择对象
-      document.execCommand("Copy");
-      $("#msg").show()
-      setTimeout(() => {
-        $("#msg").hide()
-      }, 1500);
     }
 
     /*刷新历史记录*/
@@ -276,7 +262,7 @@
       // 展示history 列表
       let ul = $('<ul></ul>')
       historyArr.forEach(item => {
-        ul.append('<li>' + item + '<span onclick="copyPwd(\'' + item + '\')">复制</span></li>')
+        ul.append('<li>' + item + '<span onclick="copyTextToClipboard(\'' + item + '\')">复制</span></li>')
       });
       $(".history-list").html(ul);
       historyArr.push(pwd)
@@ -290,9 +276,45 @@
     /*清除历史记录*/
     function cleanHistory() {
       localStorage.removeItem('history')
-      document.querySelector('#result-area').value = '';
+      document.querySelector('#result-area').textContent = '';
       $("#cleanButton").hide()
       $(".history-list").html('');
+    }
+
+    /**
+     * https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+     */
+    function copyTextToClipboard(text) {
+      if (!text) {
+        text = document.querySelector('#result-area').textContent
+      }
+      var textArea = document.createElement("textarea");
+      textArea.style.position = 'fixed';
+      textArea.style.top = 0;
+      textArea.style.left = 0;
+      textArea.style.width = '2em';
+      textArea.style.height = '2em';
+      textArea.style.padding = 0;
+      textArea.style.border = 'none';
+      textArea.style.outline = 'none';
+      textArea.style.boxShadow = 'none';
+      textArea.style.background = 'transparent';
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Copying text command was ' + msg);
+        $("#msg").show()
+        setTimeout(() => {
+          $("#msg").hide()
+        }, 1500);
+      } catch (err) {
+        console.log('Oops, unable to copy');
+      }
+      document.body.removeChild(textArea);
     }
   </script>
 </body>
