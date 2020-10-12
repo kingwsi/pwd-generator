@@ -7,8 +7,43 @@
   <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <title>🎉密码生成</title>
   <style>
-    body {
-      background-color: aliceblue;
+    @media (prefers-color-scheme: light) {
+      body {
+        background: white;
+        color: #555;
+      }
+
+      .button {
+        background: rgb(128, 128, 128);
+        color: #FFF;
+        border: 1px solid #ececec;
+        box-shadow: 2px 1px 4px 0px #bcbcbc;
+      }
+
+      .message {
+        color: #FFF;
+        background-color: #67C23A;
+        box-shadow: 5px 3px 15px 1px #a2a2a2;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #333;
+        color: rgb(224, 224, 224);
+      }
+
+      .button {
+        background: #333;
+        border: 1px solid #ececec;
+        box-shadow: 2px 1px 4px 0px #313131;
+      }
+
+      .message {
+        color: rgb(224, 224, 224);
+        background: #3a6c21;
+        box-shadow: 2px 1px 4px 0px #313131;
+      }
     }
 
     span {
@@ -39,12 +74,9 @@
       position: absolute;
       left: 5%;
       top: 30%;
-      color: #FFF;
       border-radius: 5px;
       line-height: 40px;
-      background-color: #67C23A;
       text-align: center;
-      box-shadow: 5px 3px 15px 1px #a2a2a2;
       font-size: 1em;
       animation: dialogOpen .5s;
       -moz-animation: dialogOpen .5s;
@@ -187,13 +219,10 @@
     .button {
       height: 20px;
       width: 60px;
-      background-color: #eeeeee;
-      border: 1px solid #333;
       margin: 0px 18px;
       font-size: 1.2em;
       border-radius: 15px;
       padding: 3px 15px;
-      box-shadow: 2px 1px 4px 0px #bcbcbc;
     }
 
     .history {
