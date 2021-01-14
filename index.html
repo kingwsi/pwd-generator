@@ -25,6 +25,14 @@
         background-color: #67C23A;
         box-shadow: 5px 3px 15px 1px #a2a2a2;
       }
+
+      a{
+        text-decoration:none;
+      }
+      a:link {color: #000}
+      a:visited {color: #000}
+      a:hover {color: #000}
+      a:active {color: #000}
     }
 
     @media (prefers-color-scheme: dark) {
@@ -44,6 +52,16 @@
         background: #3a6c21;
         box-shadow: 2px 1px 4px 0px #313131;
       }
+
+      a{
+        text-decoration:none;
+        color: rgb(224, 224, 224)
+      }
+      a:link {color: rgb(224, 224, 224)}
+      a:visited {color: rgb(224, 224, 224)}
+      a:hover {color: rgb(159, 159, 159)
+      }
+      a:active {color: rgb(224, 224, 224)}
     }
 
     span {
@@ -260,9 +278,10 @@
     <div style="width: 100%;text-align: center; margin-top:50px; color: #7c7c7c" onclick="cleanHistory()"
       id="cleanButton">
       <span>清除记录</span>
+      <br/>
+      <a style="font-size: 12px" href="https://github.com/kingwsi/pwd-generator">GitHub</a>
     </div>
   </div>
-
 
   <script>
     let letter = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
